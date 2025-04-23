@@ -330,7 +330,7 @@ decrypt_nsig = function (r) {
   I[2] = I;
   I[12] = I;
   I[32] = I;
-  if (typeof LSU === Y[77]) return r;
+  // if (typeof LSU === Y[77]) return r; LSU is undefined in the global variable array.
   try {
     try {
       I[65] != -9 &&
