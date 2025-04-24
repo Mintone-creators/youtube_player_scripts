@@ -12,8 +12,7 @@ async def main():
        
         
         stext = script.text
-     
-        
+
         ctx = dukpy.JSInterpreter()
         ctx.evaljs([stext])
         sig = ctx.evaljs("decrypt_sig(dukpy['s'])" , s=parse_qs(signature_cypher)['s'][0])
