@@ -91,6 +91,28 @@ var Y = [
   "r",
 ];
 
+var q3 = {
+  rW: function (r, V) {
+    var I = r[0];
+    r[0] = r[V % r[Y[1]]];
+    r[V % r[Y[1]]] = I;
+  },
+  Y6: function (r) {
+    r[Y[29]]();
+  },
+  t0: function (r, V) {
+    r[Y[16]](0, V);
+  },
+};
+
+decrypt_sig = function (r) {
+  r = r[Y[14]](Y[19]);
+  q3[Y[8]](r, 30);
+  q3[Y[8]](r, 65);
+  q3[Y[8]](r, 2);
+  return r[Y[3]](Y[19]);
+};
+
 decrypt_nsig = function (r) {
   var V = r[Y[14]](Y[19]),
     I = [

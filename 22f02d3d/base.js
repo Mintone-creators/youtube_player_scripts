@@ -3,6 +3,34 @@ var z =
     "{"
   );
 
+var Dw = {
+  vS: function (U) {
+    U[z[14]]();
+  },
+  tE: function (U, Y) {
+    var A = U[0];
+    U[0] = U[Y % U[z[9]]];
+    U[Y % U[z[9]]] = A;
+  },
+  So: function (U, Y) {
+    U[z[4]](0, Y);
+  },
+};
+
+decrypt_sig = function (U) {
+  U = U[z[32]](z[15]);
+  Dw[z[29]](U, 1);
+  Dw[z[41]](U, 46);
+  Dw[z[44]](U, 30);
+  Dw[z[29]](U, 3);
+  Dw[z[41]](U, 45);
+  Dw[z[44]](U, 59);
+  Dw[z[29]](U, 1);
+  Dw[z[41]](U, 8);
+  Dw[z[29]](U, 1);
+  return U[z[49]](z[15]);
+};
+
 decrypt_nsig = function (U) {
   var Y = U[z[32]](z[15]),
     A = [
@@ -367,4 +395,3 @@ decrypt_nsig = function (U) {
   }
   return Y[z[49]](z[15]);
 };
-
