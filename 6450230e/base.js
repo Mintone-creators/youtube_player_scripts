@@ -1,5 +1,5 @@
 // taken from :-> https://www.youtube.com/s/player/6450230e/player_ias.vflset/nl_NL/base.js
-const signatureTimestamp = "signatureTimestamp:20199";
+var signatureTimestamp = "signatureTimestamp:20199";
 
 var Y = [
   "clone",

@@ -1,5 +1,5 @@
 // extracted from :-> https://www.youtube.com/s/player/8102da6c/player_ias.vflset/en_US/base.js
-const signatureTimestamp = "signatureTimestamp:20202";
+var signatureTimestamp = "signatureTimestamp:20202";
 
 var K =
   "1969-12-31T19:31:04.000-04:30{url{S{reverse{clone{1{split{{youtube.player.web_20250423_22_RC00{slice{Ko{unshift{startsWith{L{\\.googlevideo\\.com${path{splice{scheme{yV{toString{set{s{length{indexOf{={push{&{get{match{:{,{join{rr?[1-9].*\\.c\\.youtube\\.com${local{1969-12-31T21:15:21.000-02:45{,51];c[56]=c;{pm{?{prototype{1969-12-31T18:45:43.000-05:15{JD{rr{/api/manifest{__v4LZM5jLg6p0BleL-_w8_{www.youtube.com{cmo=td{r{n{B{forEach{1970-01-01T09:15:16.000+09:15{fromCharCode{sp{playerfallback{N{/{redirector.googlevideo.com{fallback_count{index.m3u8{mn{://{fvip{%3D{assign{1969-12-31T14:15:10.000-09:45{cmo={---{replace{/initplayback{/videoplayback{/file/index.m3u8{\\.a1\\.googlevideo\\.com${file{cmo{shift{pop{1970-01-01T11:15:43.000+11:15{1969-12-31T13:00:03.000-11:00{a1.googlevideo.com{undefined{ju{Untrusted URL{P8gjKK{signatureCipher{1970-01-01T11:15:55.000+11:15{,,,,\\,){cmo=pf{2{Y8{//".split(
