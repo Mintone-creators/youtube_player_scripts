@@ -9,5 +9,8 @@ async function testNSig(n) {
 
 
 testNSig("helloworld")
-  .then(console.log)
+  .then(result => {
+    console.log(result);
+    return result === "SMubQOdx";
+  })
   .catch(console.error);

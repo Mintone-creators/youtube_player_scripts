@@ -93,22 +93,22 @@ var Y = [
 
 var q3 = {
   rW: function (r, V) {
-    var I = r[0]; // Y[0] = "clone" -> r[0] = r.clone();
-    r[0] = r[V % r[Y[1]]]; // Y[1] = "length" -> r[0] = r[V % r.length];
-    r[V % r[Y[1]]] = I; // Y[1] = "length" -> r[V % r.length] = I;
+    var I = r[0];
+    r[0] = r[V % r[Y[1]]];
+    r[V % r[Y[1]]] = I;
   },
   Y6: function (r) {
-    r[Y[29]](); // Y[29] = "reverse" -> r.reverse();
+    r[Y[29]]();
   },
   t0: function (r, V) {
-    r[Y[16]](0, V); // Y[16] = "splice" -> r.splice(0, V);
+    r[Y[16]](0, V);
   },
 };
 
 decrypt_sig = function (r) {
-  r = r[Y[14]](Y[19]); // Y[14] = "split" & Y[19] = "" -> r.split("");
-  q3[Y[8]](r, 30); // Y[8] = "rW" -> q3.rW(r , 30);
-  q3[Y[8]](r, 65); // Y[8] = "rW" -> q3.rW(r , 65);
-  q3[Y[8]](r, 2); // Y[8] = "rW" -> q3.rW(r , 2);
-  return r[Y[3]](Y[19]); // Y[3] = "join" & Y[19] = "" -> r.join("");
+  r = r[Y[14]](Y[19]);
+  q3[Y[8]](r, 30);
+  q3[Y[8]](r, 65);
+  q3[Y[8]](r, 2);
+  return r[Y[3]](Y[19]);
 };
