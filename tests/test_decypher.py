@@ -8,14 +8,14 @@ async def main():
     url = parse_qs(signature_cypher)['url'][0]
     
     async with httpx.AsyncClient() as client:
-        script = await client.get("https://raw.githubusercontent.com/HadeMusic/youtube_player_scripts/refs/heads/main/6450230e/sig.js")
-        nscript = await client.get('https://raw.githubusercontent.com/HadeMusic/youtube_player_scripts/refs/heads/main/6450230e/nsig.js')
+        script = await client.get("https://raw.githubusercontent.com/HadeMusic/youtube_player_scripts/refs/heads/main/6450230e/base.js")
+       
         
         stext = script.text
-        ntext = nscript.text
+     
         
         ctx = dukpy.JSInterpreter()
-        ctx.evaljs([stext, ntext])
+        ctx.evaljs([stext])
         sig = ctx.evaljs("decrypt_sig(dukpy['s'])" , s=parse_qs(signature_cypher)['s'][0])
         n = ctx.evaljs("decrypt_nsig(dukpy['n'])" , n=parse_qs(url)['n'][0])
         
