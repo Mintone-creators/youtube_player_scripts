@@ -3,10 +3,11 @@ name: Update YouTube Player Script
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 * * * *"  # every hour at minute 0
+    - cron: "0 * * * *"   # every hour
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   check-player:
@@ -23,22 +24,21 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install UV
-        run: pip install uv
-
-      - name: Install deps
-        run: uv sync
+      - name: Install UV & deps
+        run: |
+          pip install uv
+          uv sync
 
       - name: Snapshot before (dirs only)
         run: |
-          find . -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort > before.txt
+          find . -maxdepth 1 -mindepth 1 -type d -not -path "*/\.*" -printf "%f\n" | sort > before.txt
 
       - name: Fetch and build JS
         run: uv run workflow.py
 
       - name: Snapshot after (dirs only)
         run: |
-          find . -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort > after.txt
+          find . -maxdepth 1 -mindepth 1 -type d -not -path "*/\.*" -printf "%f\n" | sort > after.txt
 
       - name: Detect new directory
         id: detect
@@ -50,40 +50,62 @@ jobs:
           fi
           echo "player_id=$NEW_DIR" >> $GITHUB_OUTPUT
           echo "branch=update-player-$NEW_DIR" >> $GITHUB_OUTPUT
+          echo "New player detected: $NEW_DIR"
 
       - name: Skip if nothing new
         if: steps.detect.outputs.skip == 'true'
         run: echo "Nothing to update."
 
+      - name: Debug file listing
+        if: steps.detect.outputs.skip != 'true'
+        run: |
+          PLAYER_ID="${{ steps.detect.outputs.player_id }}"
+          echo "New directory contents:"
+          ls -la "$PLAYER_ID"
+
+      - name: Configure Git
+        if: steps.detect.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Check remote branch
         if: steps.detect.outputs.skip != 'true'
         id: branch-check
         run: |
-          BR=${{ steps.detect.outputs.branch }}
-          if git ls-remote --heads origin "$BR" | grep -q "$BR"; then
+          if git ls-remote --heads origin "refs/heads/${{ steps.detect.outputs.branch }}" | grep -q .; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Abort if branch exists
-        if: steps.branch-check.outputs.exists == 'true'
-        run: echo "Branch ${{ steps.detect.outputs.branch }} already exists, skipping PR."
-
-      - name: Create branch & push
-        if: steps.branch-check.outputs.exists == 'false'
+      - name: Create branch and commit changes
+        if: steps.detect.outputs.skip != 'true' && steps.branch-check.outputs.exists == 'false'
         run: |
-          BR=${{ steps.detect.outputs.branch }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BR"
+          PLAYER_ID="${{ steps.detect.outputs.player_id }}"
+          BRANCH="${{ steps.detect.outputs.branch }}"
+          
+          echo "Creating branch $BRANCH for player $PLAYER_ID"
+          git checkout -b "$BRANCH"
+        
+        
           rm -f before.txt after.txt
-          git add --all
-          git commit -m "chore: update YouTube player script for ${{ steps.detect.outputs.player_id }}"
-          git push --set-upstream origin "$BR"
+          
+          
+          git status
+          
+          
+          git add -f "$PLAYER_ID"
+          
+          
+          git status
+          
+          
+          git commit -m "chore: update YouTube player script for $PLAYER_ID"
+          git push --set-upstream origin "$BRANCH"
 
       - name: Create Pull Request
-        if: steps.branch-check.outputs.exists == 'false'
+        if: steps.detect.outputs.skip != 'true' && steps.branch-check.outputs.exists == 'false'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -93,6 +115,6 @@ jobs:
           commit-message: "chore: update YouTube player script for ${{ steps.detect.outputs.player_id }}"
           body: |
             This PR updates the YouTube decryption script for player ID `${{ steps.detect.outputs.player_id }}`.
-            - Generated on ${{ github.run_date }}
-            - Includes new `base.js` bundle.
+            - Generated on ${{ github.run_id }}
+            - Includes the new `base.js` bundle.
           labels: automated
